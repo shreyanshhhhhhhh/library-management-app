@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LibraTrack — Library Inventory Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span class="material-icons-outlined logo-icon">local_library</span>
+            <h1 class="logo-text">LibraTrack</h1>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-page="dashboard">
+                <span class="material-icons-outlined">dashboard</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-page="catalog">
+                <span class="material-icons-outlined">menu_book</span>
+                <span>Book Catalog</span>
+            </a>
+            <a href="#" class="nav-item" data-page="members">
+                <span class="material-icons-outlined">people</span>
+                <span>Members</span>
+            </a>
+            <a href="#" class="nav-item" data-page="issue">
+                <span class="material-icons-outlined">assignment_return</span>
+                <span>Issue / Return</span>
+            </a>
+            <a href="#" class="nav-item" data-page="transactions">
+                <span class="material-icons-outlined">receipt_long</span>
+                <span>Transactions</span>
+            </a>
+            <a href="#" class="nav-item" data-page="fines">
+                <span class="material-icons-outlined">payments</span>
+                <span>Fines</span>
+            </a>
+            <a href="#" class="nav-item" data-page="reports">
+                <span class="material-icons-outlined">bar_chart</span>
+                <span>Reports</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <span class="material-icons-outlined">account_circle</span>
+                <div>
+                    <span class="user-name">Admin User</span>
+                    <span class="user-role">Librarian</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle">
+                <span class="material-icons-outlined">menu</span>
+            </button>
+            <div class="search-bar">
+                <span class="material-icons-outlined">search</span>
+                <input type="text" id="globalSearch" placeholder="Search books, members, transactions...">
+            </div>
+            <div class="topbar-actions">
+                <button class="icon-btn notification-btn" id="notifBtn">
+                    <span class="material-icons-outlined">notifications</span>
+                    <span class="badge" id="notifBadge" style="display:none;">0</span>
+                </button>
+                <button class="btn btn-primary" id="quickActionBtn">
+                    <span class="material-icons-outlined">add</span>
+                    Quick Action
+                </button>
+            </div>
+        </header>
+
+        <!-- Page Container -->
+        <div class="page-container" id="pageContainer">
+
+            <!-- ==================== DASHBOARD ==================== -->
+            <section class="page active" id="page-dashboard">
+                <div class="page-header">
+                    <h2>Dashboard</h2>
+                    <p class="page-subtitle">Overview of library operations</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <span class="material-icons-outlined">menu_book</span>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-totalBooks">0</span>
+                            <span class="stat-label">Total Books</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <span class="material-icons-outlined">check_circle</span>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-available">0</span>
+                            <span class="stat-label">Available</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <span class="material-icons-outlined">assignment_return</span>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-issued">0</span>
+                            <span class="stat-label">Issued</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon red">
+                            <span class="material-icons-outlined">warning</span>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-overdue">0</span>
+                            <span class="stat-label">Overdue</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <span class="material-icons-outlined">people</span>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-members">0</span>
+                            <span class="stat-label">Members</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon yellow">
+                            <span class="material-icons-outlined">payments</span>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-fines">₹0</span>
+                            <span class="stat-label">Pending Fines</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Recent Transactions</h3>
+                            <a href="#" class="view-all" data-page="transactions">View All →</a>
+                        </div>
+                        <div class="card-body">
+                            <table class="data-table compact">
+                                <thead>
+                                    <tr>
+                                        <th>Book</th>
+                                        <th>Member</th>
+                                        <th>Type</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentTransactions">
+                                    <tr><td colspan="4" class="empty-row">No transactions yet</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Overdue Books</h3>
+                            <a href="#" class="view-all" data-page="fines">View All →</a>
+                        </div>
+                        <div class="card-body">
+                            <table class="data-table compact">
+                                <thead>
+                                    <tr>
+                                        <th>Book</th>
+                                        <th>Member</th>
+                                        <th>Due Date</th>
+                                        <th>Fine</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="overdueList">
+                                    <tr><td colspan="4" class="empty-row">No overdue books</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== BOOK CATALOG ==================== -->
+            <section class="page" id="page-catalog">
+                <div class="page-header">
+                    <h2>Book Catalog</h2>
+                    <p class="page-subtitle">Manage your library's book collection</p>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="addBookBtn">
+                            <span class="material-icons-outlined">add</span>
+                            Add Book
+                        </button>
+                    </div>
+                </div>
+
+                <div class="filters-bar">
+                    <div class="filter-group">
+                        <input type="text" id="catalogSearch" placeholder="Search by title, author, ISBN..." class="filter-input">
+                    </div>
+                    <div class="filter-group">
+                        <select id="catalogGenre" class="filter-select">
+                            <option value="">All Genres</option>
+                            <option value="Fiction">Fiction</option>
+                            <option value="Non-Fiction">Non-Fiction</option>
+                            <option value="Science">Science</option>
+                            <option value="Technology">Technology</option>
+                            <option value="History">History</option>
+                            <option value="Biography">Biography</option>
+                            <option value="Philosophy">Philosophy</option>
+                            <option value="Literature">Literature</option>
+                            <option value="Reference">Reference</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <select id="catalogStatus" class="filter-select">
+                            <option value="">All Status</option>
+                            <option value="available">Available</option>
+                            <option value="issued">All Copies Issued</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <table class="data-table" id="catalogTable">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>ISBN</th>
+                                <th>Genre</th>
+                                <th>Total Copies</th>
+                                <th>Available</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="catalogBody">
+                            <tr><td colspan="7" class="empty-row">No books in catalog. Add your first book!</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== MEMBERS ==================== -->
+            <section class="page" id="page-members">
+                <div class="page-header">
+                    <h2>Members</h2>
+                    <p class="page-subtitle">Manage library members</p>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" id="addMemberBtn">
+                            <span class="material-icons-outlined">person_add</span>
+                            Add Member
+                        </button>
+                    </div>
+                </div>
+
+                <div class="filters-bar">
+                    <div class="filter-group">
+                        <input type="text" id="memberSearch" placeholder="Search by name, email, phone..." class="filter-input">
+                    </div>
+                    <div class="filter-group">
+                        <select id="memberType" class="filter-select">
+                            <option value="">All Types</option>
+                            <option value="Student">Student</option>
+                            <option value="Faculty">Faculty</option>
+                            <option value="Staff">Staff</option>
+                            <option value="External">External</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <table class="data-table" id="memberTable">
+                        <thead>
+                            <tr>
+                                <th>Member ID</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Contact</th>
+                                <th>Books Issued</th>
+                                <th>Pending Fine</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="memberBody">
+                            <tr><td colspan="7" class="empty-row">No members registered yet.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== ISSUE / RETURN ==================== -->
+            <section class="page" id="page-issue">
+                <div class="page-header">
+                    <h2>Issue / Return Books</h2>
+                    <p class="page-subtitle">Issue books to members or process returns</p>
+                </div>
+
+                <div class="issue-return-grid">
+                    <!-- Issue Book Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><span class="material-icons-outlined">assignment_return</span> Issue a Book</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="issueForm">
+                                <div class="form-group">
+                                    <label for="issueMember">Member</label>
+                                    <select id="issueMember" required>
+                                        <option value="">Select Member...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="issueBook">Book</label>
+                                    <select id="issueBook" required>
+                                        <option value="">Select Book...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="issueDate">Issue Date</label>
+                                    <input type="date" id="issueDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dueDate">Due Date</label>
+                                    <input type="date" id="dueDate" required>
+                                </div>
+                                <div class="form-info" id="issueInfo" style="display:none;">
+                                    <span class="material-icons-outlined">info</span>
+                                    <span id="issueInfoText"></span>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-full">
+                                    <span class="material-icons-outlined">check</span>
+                                    Issue Book
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Return Book Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><span class="material-icons-outlined">keyboard_return</span> Return a Book</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="returnForm">
+                                <div class="form-group">
+                                    <label for="returnTransaction">Select Issued Book</label>
+                                    <select id="returnTransaction" required>
+                                        <option value="">Select an issued book...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="returnDate">Return Date</label>
+                                    <input type="date" id="returnDate" required>
+                                </div>
+                                <div class="return-summary" id="returnSummary" style="display:none;">
+                                    <h4>Return Summary</h4>
+                                    <div class="summary-row">
+                                        <span>Book:</span>
+                                        <span id="retBook">—</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Member:</span>
+                                        <span id="retMember">—</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Due Date:</span>
+                                        <span id="retDue">—</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Days Overdue:</span>
+                                        <span id="retOverdue">—</span>
+                                    </div>
+                                    <div class="summary-row fine-row">
+                                        <span>Fine:</span>
+                                        <span id="retFine">₹0</span>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-secondary btn-full">
+                                    <span class="material-icons-outlined">keyboard_return</span>
+                                    Process Return
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== TRANSACTIONS ==================== -->
+            <section class="page" id="page-transactions">
+                <div class="page-header">
+                    <h2>Transactions</h2>
+                    <p class="page-subtitle">Complete history of all book issues and returns</p>
+                </div>
+
+                <div class="filters-bar">
+                    <div class="filter-group">
+                        <input type="text" id="txnSearch" placeholder="Search transactions..." class="filter-input">
+                    </div>
+                    <div class="filter-group">
+                        <select id="txnType" class="filter-select">
+                            <option value="">All Types</option>
+                            <option value="issue">Issue</option>
+                            <option value="return">Return</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <select id="txnStatus" class="filter-select">
+                            <option value="">All Status</option>
+                            <option value="active">Active (Not Returned)</option>
+                            <option value="returned">Returned</option>
+                            <option value="overdue">Overdue</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <table class="data-table" id="txnTable">
+                        <thead>
+                            <tr>
+                                <th>Txn ID</th>
+                                <th>Book</th>
+                                <th>Member</th>
+                                <th>Issue Date</th>
+                                <th>Due Date</th>
+                                <th>Return Date</th>
+                                <th>Status</th>
+                                <th>Fine</th>
+                            </tr>
+                        </thead>
+                        <tbody id="txnBody">
+                            <tr><td colspan="8" class="empty-row">No transactions yet</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== FINES ==================== -->
+            <section class="page" id="page-fines">
+                <div class="page-header">
+                    <h2>Fines Management</h2>
+                    <p class="page-subtitle">Track and collect overdue fines</p>
+                </div>
+
+                <div class="fines-summary-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon red">
+                            <span class="material-icons-outlined">money_off</span>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="fines-totalPending">₹0</span>
+                            <span class="stat-label">Total Pending</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <span class="material-icons-outlined">paid</span>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="fines-totalCollected">₹0</span>
+                            <span class="stat-label">Total Collected</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <span class="material-icons-outlined">timer</span>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="fines-rate">₹2/day</span>
+                            <span class="stat-label">Fine Rate</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Pending Fines</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Member</th>
+                                <th>Book</th>
+                                <th>Days Overdue</th>
+                                <th>Fine Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="finesBody">
+                            <tr><td colspan="6" class="empty-row">No pending fines</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card" style="margin-top:1.5rem;">
+                    <div class="card-header">
+                        <h3>Fine Payment History</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Payment ID</th>
+                                <th>Member</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Method</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fineHistoryBody">
+                            <tr><td colspan="5" class="empty-row">No payments recorded</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ==================== REPORTS ==================== -->
+            <section class="page" id="page-reports">
+                <div class="page-header">
+                    <h2>Reports & Analytics</h2>
+                    <p class="page-subtitle">Insights into library operations</p>
+                </div>
+
+                <div class="reports-grid">
+                    <div class="card">
+                        <div class="card-header"><h3>Books by Genre</h3></div>
+                        <div class="card-body chart-container">
+                            <canvas id="genreChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h3>Monthly Transactions</h3></div>
+                        <div class="card-body chart-container">
+                            <canvas id="monthlyChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h3>Top Borrowed Books</h3></div>
+                        <div class="card-body">
+                            <table class="data-table compact">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Book</th>
+                                        <th>Times Borrowed</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="topBooksBody">
+                                    <tr><td colspan="3" class="empty-row">No data yet</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h3>Most Active Members</h3></div>
+                        <div class="card-body">
+                            <table class="data-table compact">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Member</th>
+                                        <th>Transactions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="topMembersBody">
+                                    <tr><td colspan="3" class="empty-row">No data yet</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- Add/Edit Book Modal -->
+    <div class="modal-overlay" id="bookModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="bookModalTitle">Add New Book</h3>
+                <button class="modal-close" data-close="bookModal">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="bookForm">
+                    <input type="hidden" id="bookId">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bookTitle">Title *</label>
+                            <input type="text" id="bookTitle" required placeholder="Enter book title">
+                        </div>
+                        <div class="form-group">
+                            <label for="bookAuthor">Author *</label>
+                            <input type="text" id="bookAuthor" required placeholder="Author name">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bookISBN">ISBN *</label>
+                            <input type="text" id="bookISBN" required placeholder="e.g., 978-0-13-468599-1">
+                        </div>
+                        <div class="form-group">
+                            <label for="bookGenre">Genre *</label>
+                            <select id="bookGenre" required>
+                                <option value="">Select Genre</option>
+                                <option value="Fiction">Fiction</option>
+                                <option value="Non-Fiction">Non-Fiction</option>
+                                <option value="Science">Science</option>
+                                <option value="Technology">Technology</option>
+                                <option value="History">History</option>
+                                <option value="Biography">Biography</option>
+                                <option value="Philosophy">Philosophy</option>
+                                <option value="Literature">Literature</option>
+                                <option value="Reference">Reference</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bookPublisher">Publisher</label>
+                            <input type="text" id="bookPublisher" placeholder="Publisher name">
+                        </div>
+                        <div class="form-group">
+                            <label for="bookYear">Year</label>
+                            <input type="number" id="bookYear" placeholder="e.g., 2023" min="1000" max="2099">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bookCopies">Total Copies *</label>
+                            <input type="number" id="bookCopies" required min="1" value="1" placeholder="Number of copies">
+                        </div>
+                        <div class="form-group">
+                            <label for="bookLocation">Shelf Location</label>
+                            <input type="text" id="bookLocation" placeholder="e.g., Rack A-3">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-ghost" data-close="bookModal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="bookSubmitBtn">Add Book</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Member Modal -->
+    <div class="modal-overlay" id="memberModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="memberModalTitle">Add New Member</h3>
+                <button class="modal-close" data-close="memberModal">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="memberForm">
+                    <input type="hidden" id="memberId">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="memberName">Full Name *</label>
+                            <input type="text" id="memberName" required placeholder="Full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="memberTypeInput">Member Type *</label>
+                            <select id="memberTypeInput" required>
+                                <option value="">Select Type</option>
+                                <option value="Student">Student</option>
+                                <option value="Faculty">Faculty</option>
+                                <option value="Staff">Staff</option>
+                                <option value="External">External</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="memberEmail">Email *</label>
+                            <input type="email" id="memberEmail" required placeholder="email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="memberPhone">Phone</label>
+                            <input type="tel" id="memberPhone" placeholder="Phone number">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="memberMaxBooks">Max Books Allowed</label>
+                            <input type="number" id="memberMaxBooks" min="1" max="20" value="3">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-ghost" data-close="memberModal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="memberSubmitBtn">Add Member</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Book Details Modal -->
+    <div class="modal-overlay" id="bookDetailModal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3>Book Details</h3>
+                <button class="modal-close" data-close="bookDetailModal">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body" id="bookDetailContent">
+            </div>
+        </div>
+    </div>
+
+    <!-- Member Detail Modal -->
+    <div class="modal-overlay" id="memberDetailModal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3>Member Details</h3>
+                <button class="modal-close" data-close="memberDetailModal">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body" id="memberDetailContent">
+            </div>
+        </div>
+    </div>
+
+    <!-- Pay Fine Modal -->
+    <div class="modal-overlay" id="payFineModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Pay Fine</h3>
+                <button class="modal-close" data-close="payFineModal">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="payFineForm">
+                    <input type="hidden" id="payFineTxnId">
+                    <div class="fine-pay-info">
+                        <p><strong>Member:</strong> <span id="payFineMember"></span></p>
+                        <p><strong>Book:</strong> <span id="payFineBook"></span></p>
+                        <p><strong>Fine Amount:</strong> <span id="payFineAmount" class="text-danger"></span></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="payFineMethod">Payment Method</label>
+                        <select id="payFineMethod" required>
+                            <option value="Cash">Cash</option>
+                            <option value="UPI">UPI</option>
+                            <option value="Card">Card</option>
+                            <option value="Waived">Waived by Librarian</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-ghost" data-close="payFineModal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Confirm Payment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Action Modal -->
+    <div class="modal-overlay" id="quickActionModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Quick Actions</h3>
+                <button class="modal-close" data-close="quickActionModal">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="quick-actions-grid">
+                    <button class="quick-action-item" id="qaAddBook">
+                        <span class="material-icons-outlined">add_circle</span>
+                        <span>Add Book</span>
+                    </button>
+                    <button class="quick-action-item" id="qaAddMember">
+                        <span class="material-icons-outlined">person_add</span>
+                        <span>Add Member</span>
+                    </button>
+                    <button class="quick-action-item" id="qaIssueBook">
+                        <span class="material-icons-outlined">assignment_return</span>
+                        <span>Issue Book</span>
+                    </button>
+                    <button class="quick-action-item" id="qaReturnBook">
+                        <span class="material-icons-outlined">keyboard_return</span>
+                        <span>Return Book</span>
+                    </button>
+                    <button class="quick-action-item" id="qaLoadSample">
+                        <span class="material-icons-outlined">dataset</span>
+                        <span>Load Sample Data</span>
+                    </button>
+                    <button class="quick-action-item" id="qaResetData">
+                        <span class="material-icons-outlined">restart_alt</span>
+                        <span>Reset All Data</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Dialog -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h3 id="confirmTitle">Confirm</h3>
+                <button class="modal-close" data-close="confirmModal">
+                    <span class="material-icons-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage"></p>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-ghost" data-close="confirmModal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmYes">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notifPanel" style="display:none;">
+        <div class="notif-header">
+            <h3>Notifications</h3>
+            <button class="btn btn-ghost btn-sm" id="clearNotifs">Clear All</button>
+        </div>
+        <div class="notif-list" id="notifList">
+            <div class="notif-empty">No notifications</div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script src="app.js"></script>
+</body>
+</html>
