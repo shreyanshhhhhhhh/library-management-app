@@ -128,19 +128,19 @@ def build_pdf():
     meta_data = [
         [
             Paragraph("<b>Candidate Name:</b> Shreyansh Pandey", body_style),
+            Paragraph("<b>PRN:</b> 23070126124", body_style)
+        ],
+        [
+            Paragraph("<b>Branch:</b> Artificial Intelligence and Machine Learning", body_style),
             Paragraph("<b>Institute:</b> Symbiosis Institute of Technology (SIT), Pune", body_style)
         ],
         [
-            Paragraph("<b>Program:</b> B.Tech in Artificial Intelligence & Machine Learning", body_style),
-            Paragraph("<b>Assessment:</b> Azista Space Technical Hiring Test", body_style)
+            Paragraph("<b>Assessment:</b> Azista Space Technical Hiring Test", body_style),
+            Paragraph("<b>Q1 Research:</b> Accepted at IEEE IConAECC 2026 (Paper ID: 1231)", body_style)
         ],
         [
-            Paragraph("<b>Question 1 (Paper):</b> Accepted at IEEE IConAECC 2026 (Paper ID: 1231)", body_style),
-            Paragraph("<b>Question 1 (Code):</b> <a href='https://github.com/shreyanshhhhhhhh/TIcket_agent_BTECH' color='#111827'><u>github.com/shreyanshhhhhhhh/TIcket_agent_BTECH</u></a>", body_style)
-        ],
-        [
-            Paragraph("<b>Question 2 (Live):</b> <a href='https://shreyanshhhhhhhh.github.io/library-management-app/' color='#111827'><u>shreyanshhhhhhhh.github.io/library-management-app</u></a>", body_style),
-            Paragraph("<b>Question 2 (Code):</b> <a href='https://github.com/shreyanshhhhhhhh/library-management-app' color='#111827'><u>github.com/shreyanshhhhhhhh/library-management-app</u></a>", body_style)
+            Paragraph("<b>Q1 GitHub (Ticket Agent):</b> <a href='https://github.com/shreyanshhhhhhhh/TIcket_agent_BTECH' color='#111827'><u>github.com/shreyanshhhhhhhh/TIcket_agent_BTECH</u></a>", body_style),
+            Paragraph("<b>Q2 Live App (Library):</b> <a href='https://shreyanshhhhhhhh.github.io/library-management-app/' color='#111827'><u>shreyanshhhhhhhh.github.io/library-management-app</u></a>", body_style)
         ]
     ]
     meta_table = Table(meta_data, colWidths=[250, 254])
